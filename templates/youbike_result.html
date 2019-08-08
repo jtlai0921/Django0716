@@ -20,6 +20,7 @@
                         <th>可借</th>
                         <th>可還</th>
                         <th>距離</th>
+                        <th>行走時間(分)</th>
                         <th>更新時間</th>
                     </tr>
                 </thead>
@@ -32,11 +33,12 @@
                         <td>{{ value.sbi }}</td>
                         <td>{{ value.bemp }}</td>
                         <td>{{ value.m }}</td>
+                        <td>{{ value.t }}</td>
                         <td>{{ value.mday }}</td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6"><center>沒有資料</center></td>
+                        <td colspan="7"><center>沒有資料</center></td>
                     </tr>
                     {% endfor %}
                 </tbody>

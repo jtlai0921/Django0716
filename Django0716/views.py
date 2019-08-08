@@ -78,6 +78,7 @@ def search(mylat, mylng, dist, sbi, bemp):
         t = '%.1f' % (m / (3000/60))
         if int(record['sbi']) >= sbi and int(record['bemp']) >= bemp and m <= dist:
             record['m'] = m//1
+            record['t'] = t
             dict.update({record['sna']: record})
 
     return dict
