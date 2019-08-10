@@ -68,3 +68,8 @@ def login_form(request):
     return render(request, 'login_form.html')
 
 
+def login_result(request):
+    email = request.POST.get('email', '')
+    password = request.POST.get('password', '')
+    remember = request.POST.get('remember', False)
+    return HttpResponse("Hello " + email + ", " + password + ", " + str(remember))

@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Login Form{% endblock %}
 {% block content %}
-    <form class="pure-form">
+    <form class="pure-form" action="/login_result/" method="POST">
+    {% csrf_token %}
     <fieldset>
         <legend>Login Form</legend>
-        <input type="email" placeholder="Email"><p/>
-        <input type="password" placeholder="Password"><p/>
+        <input type="email" placeholder="Email" name="email"><p/>
+        <input type="password" placeholder="Password" name="password"><p/>
         <label for="remember">
-            <input id="remember" type="checkbox"> Remember me
+            <input id="remember" type="checkbox" name="remember" value="True"> Remember me
         </label><p/>
         <button type="submit" class="pure-button pure-button-primary">Sign in</button>
     </fieldset>
