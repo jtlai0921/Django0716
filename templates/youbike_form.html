@@ -1,24 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Youbike</title>
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css">
-</head>
-<body style="padding:15px;">
+{% extends 'base.html' %}
+{% block title %}Youbike Form{% endblock %}
+{% block content %}
     <form class="pure-form" action="/youbike_result/" target="youbike_iframe">
         <fieldset>
             <legend>Youbike</legend>
             緯度:<input type="text" placeholder="請輸入緯度" name="lat" value="24.990205">
-            經度:<input type="text" placeholder="請輸入經度" name="lng" value="121.312054"><p />
+            經度:<input type="text" placeholder="請輸入經度" name="lng" value="121.312054">
+            <p/>
 
             距離:<input type="number" placeholder="請輸入距離" name="dist" value="500">
             可借:<input type="number" placeholder="請輸入可借數量" name="sbi" value="20">
-            可還:<input type="number" placeholder="請輸入可還數量" name="bemp" value="20"><p />
+            可還:<input type="number" placeholder="請輸入可還數量" name="bemp" value="20">
+            <p/>
 
             <button type="submit" class="pure-button pure-button-primary">查詢</button>
         </fieldset>
     </form>
-    <iframe name="youbike_iframe" width="1200" height="600" style="border:none" ></iframe>
-</body>
-</html>
+    <iframe name="youbike_iframe" width="1200" height="600" style="border:none"></iframe>
+{% endblock %}
