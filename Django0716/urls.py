@@ -34,4 +34,6 @@ urlpatterns = [
 
     path('youbike_form/', views.youbike_form),
     path('youbike_result/', views.youbike_result),
+
+    path('login_form/', views.login_form),
 ]

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Login Form{% endblock %}
+{% block content %}
+    <form class="pure-form">
+    <fieldset>
+        <legend>Login Form</legend>
+        <input type="email" placeholder="Email"><p/>
+        <input type="password" placeholder="Password"><p/>
+        <label for="remember">
+            <input id="remember" type="checkbox"> Remember me
+        </label><p/>
+        <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+    </fieldset>
+</form>
+{% endblock %}

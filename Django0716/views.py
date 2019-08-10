@@ -64,3 +64,7 @@ def youbike_result(request):
     return render(request, 'youbike_result.html', {'data': dict})
 
 
+def login_form(request):
+    return render(request, 'login_form.html')
+
+
