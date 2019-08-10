@@ -44,7 +44,7 @@ def hello_template_users(request):
 
 
 def fruit_form(request):
-    return render(request, 'fruit_form.html')
+    return render(request, 'fruit_form.html' )
 
 
 def fruit_result(request):
@@ -56,20 +56,54 @@ def fruit_result(request):
 
 
 def youbike_form(request):
-    return render(request, 'youbike_form.html')
+    dict = {}
+    dict['lat'] = request.COOKIES['lat'] if 'lat' in request.COOKIES else 24.990205
+    dict['lng'] = request.COOKIES['lng'] if 'lng' in request.COOKIES else 121.312054
+    dict['dist'] = request.COOKIES['dist'] if 'dist' in request.COOKIES else 500
+    dict['sbi'] = request.COOKIES['sbi'] if 'sbi' in request.COOKIES else 20
+    dict['bemp'] = request.COOKIES['bemp'] if 'bemp' in request.COOKIES else 20
+
+    return render(request, 'youbike_form.html', {'data': dict})
 
 
 def youbike_result(request):
-    dict = search(float(request.GET['lat']), float(request.GET['lng']), int(request.GET['dist']), int(request.GET['sbi']), int(request.GET['bemp']))
-    return render(request, 'youbike_result.html', {'data': dict})
+    lat = float(request.GET['lat'])
+    lng = float(request.GET['lng'])
+    dist = int(request.GET['dist'])
+    sbi = int(request.GET['sbi'])
+    bemp = int(request.GET['bemp'])
+
+    dict = search(lat, lng, dist, sbi, bemp)
+    response = render(request, 'youbike_result.html', {'data': dict})
+    # 存入 cookies
+    response.set_cookie('lat', lat)
+    response.set_cookie('lng', lng)
+    response.set_cookie('dist', dist)
+    response.set_cookie('sbi', sbi)
+    response.set_cookie('bemp', bemp)
+    return response
 
 
 def login_form(request):
-    return render(request, 'login_form.html')
+    dict = {}
+    dict['email'] = request.COOKIES['email'] if 'email' in request.COOKIES else ''
+    dict['password'] = request.COOKIES['password'] if 'password' in request.COOKIES else ''
+    dict['remember'] = 'checked' if 'remember' in request.COOKIES else ''
+    return render(request, 'login_form.html', {'data': dict})
 
 
 def login_result(request):
     email = request.POST.get('email', '')
     password = request.POST.get('password', '')
     remember = request.POST.get('remember', False)
-    return HttpResponse("Hello " + email + ", " + password + ", " + str(remember))
+    response = HttpResponse("Hello " + email + ", " + password + ", " + str(remember))
+    # 將資料存進 cookie
+    if remember:
+        response.set_cookie('email', email)
+        response.set_cookie('password', password)
+        response.set_cookie('remember', remember)
+    else:
+        response.delete_cookie('email')
+        response.delete_cookie('password')
+        response.delete_cookie('remember')
+    return response
