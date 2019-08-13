@@ -117,15 +117,14 @@ def login_result(request):
 
 
 def macdonald_order_form(request):
-    if 'orders' not in request.session:
-        request.session['orders'] = []
+    if 'orders' not in request.session or request.session['orders'] == None:
+        print('none orders')
+    request.session['orders'] = []
 
-    dict = request.session['orders']
-    print(dict)
-    if request.method == 'POST':
-        item = {'product': request.POST['product'], 'amount': request.POST['amount']}
-        request.session['orders'] = item
-        dict = request.session['orders']
-        print(dict)
-
+    item = {'product': 'A', 'amount': 10}
+    list = request.session['orders']
+    print('list', list)
+    request.session['orders'] = {'items': list.append(item)}
+    print('list', list)
+    print('session', request.session['orders'])
     return render(request, 'macdonald.html', {'data': dict})
