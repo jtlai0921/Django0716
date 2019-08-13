@@ -107,3 +107,8 @@ def login_result(request):
         response.delete_cookie('password')
         response.delete_cookie('remember')
     return response
+
+
+def map(request):
+    return render(request, 'map.html')
+
