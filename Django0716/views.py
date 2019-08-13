@@ -62,7 +62,6 @@ def youbike_form(request):
     dict['dist'] = request.COOKIES['dist'] if 'dist' in request.COOKIES else 500
     dict['sbi'] = request.COOKIES['sbi'] if 'sbi' in request.COOKIES else 20
     dict['bemp'] = request.COOKIES['bemp'] if 'bemp' in request.COOKIES else 20
-
     return render(request, 'youbike_form.html', {'data': dict})
 
 
@@ -81,7 +80,15 @@ def youbike_result(request):
     response.set_cookie('dist', dist)
     response.set_cookie('sbi', sbi)
     response.set_cookie('bemp', bemp)
+    # 存入 sesson
+    request.session['youbike_dict'] = dict
     return response
+
+
+def map(request):
+    # 取得 sesson
+    dict = request.session['youbike_dict']
+    return render(request, 'map.html', {'data': dict})
 
 
 def login_form(request):
@@ -109,6 +116,16 @@ def login_result(request):
     return response
 
 
-def map(request):
-    return render(request, 'map.html')
+def macdonald_order_form(request):
+    if 'orders' not in request.session:
+        request.session['orders'] = []
 
+    dict = request.session['orders']
+    print(dict)
+    if request.method == 'POST':
+        item = {'product': request.POST['product'], 'amount': request.POST['amount']}
+        request.session['orders'] = item
+        dict = request.session['orders']
+        print(dict)
+
+    return render(request, 'macdonald.html', {'data': dict})

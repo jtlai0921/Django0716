@@ -38,4 +38,7 @@ urlpatterns = [
 
     path('login_form/', views.login_form),
     path('login_result/', views.login_result),
+
+    path('macdonald_order_form/', views.macdonald_order_form),
+
 ]

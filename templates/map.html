@@ -34,17 +34,17 @@
           title: 'Hello World!'
         });
 
-        var marker1 = new google.maps.Marker({
-          position: {lat: 24.991146, lng: 121.313059},
+        {% for key, value in data.items %}
+        var marker = new google.maps.Marker({
+          position: {lat: {{ value.lat }}, lng: {{ value.lng}}},
           map: map,
-          title: 'Hello World!'
+          title: '{{ key }}',
+          icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+          }
         });
+        {% endfor %}
 
-        var marker2 = new google.maps.Marker({
-          position: {lat: 24.991546, lng: 121.313459},
-          map: map,
-          title: 'Hello World!'
-        });
 
       }
     </script>
