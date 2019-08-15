@@ -39,6 +39,11 @@ urlpatterns = [
     path('login_form/', views.login_form),
     path('login_result/', views.login_result),
 
-    path('macdonald_order_form/', views.macdonald_order_form),
+    path('macdonald_form/', views.macdonald_form),
+    path('macdonald_result/', views.macdonald_result),
+    path('macdonald_clear/', views.macdonald_clear),
+    path('login_session/', views.login_session),
+    path('login_session_check/', views.login_session_check),
+    path('login_session_out/', views.login_session_out),
 
 ]

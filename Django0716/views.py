@@ -116,15 +116,95 @@ def login_result(request):
     return response
 
 
-def macdonald_order_form(request):
-    if 'orders' not in request.session or request.session['orders'] == None:
-        print('none orders')
-    request.session['orders'] = []
+def macdonald_form(request):
+    try:
+        email = request.session['email']
+        return render(request, 'macdonald_form.html', locals())
+    except:
+        #return render(request, 'login_session.html')
+        return get_login_session_html(request)
 
-    item = {'product': 'A', 'amount': 10}
-    list = request.session['orders']
-    print('list', list)
-    request.session['orders'] = {'items': list.append(item)}
-    print('list', list)
-    print('session', request.session['orders'])
-    return render(request, 'macdonald.html', {'data': dict})
+
+def macdonald_result(request):
+    try:
+        email = request.session['email']
+    except:
+        #return render(request, 'login_session.html')
+        return get_login_session_html(request)
+
+    if request.method == 'POST':  # POST
+        # 取得表單資料
+        product = request.POST.get('product', '')
+        amount = request.POST.get('amount', 0)
+
+        # 組合 dict 資料
+        obj = {'product': product, 'amount': amount}
+
+        # 是否有名為 saved 的 session 資料 ?
+        if not 'saved' in request.session or not request.session['saved']:
+            request.session['saved'] = [obj]
+        else:
+            saved_list = request.session['saved']  # 取得 session list 資料
+            saved_list.append(obj)  # 加入元素
+            request.session['saved'] = saved_list  # 回存到 session 中
+
+        return render(request, 'macdonald_result.html', {'data': request.session['saved']})
+        # return HttpResponse('macdonald_result POST, ' + str(request.session['saved']))
+    else:  # GET
+        # 是否有名為 saved 的 session 資料 ?
+        if not 'saved' in request.session or not request.session['saved']:
+            return render(request, 'macdonald_result.html')
+            #return HttpResponse('macdonald_result GET empty !')
+        else:
+            return render(request, 'macdonald_result.html', {'data': request.session['saved']})
+            #return HttpResponse('macdonald_result GET, ' + str(request.session['saved']))
+
+
+def macdonald_clear(request):
+    try:
+        del request.session['saved']
+        return HttpResponse('清除完畢 !')
+    except: # 例外處理
+        return HttpResponse('沒有東西可以清 !')
+
+
+def login_session(request):
+    #return render(request, 'login_session.html')
+    return get_login_session_html(request)
+
+
+def login_session_check(request):
+    # 取得表單資料
+    email = request.POST.get('email', '')
+    password = request.POST.get('password', '')
+    if email == 'admin@gmail.com' and password == '1234':
+        request.session['email'] = email
+        response = render(request, 'macdonald_form.html', locals())
+        # 將資料存進 cookie
+        email = request.POST.get('email', '')
+        password = request.POST.get('password', '')
+        remember = request.POST.get('remember', False)
+        if remember:
+            response.set_cookie('email', email)
+            response.set_cookie('password', password)
+            response.set_cookie('remember', remember)
+        else:
+            response.delete_cookie('email')
+            response.delete_cookie('password')
+            response.delete_cookie('remember')
+        return response
+    else:
+        return HttpResponse('login error !')
+
+
+def login_session_out(request):
+    request.session.clear()
+    return get_login_session_html(request)
+
+def get_login_session_html(request):
+    dict = {}
+    dict['email'] = request.COOKIES['email'] if 'email' in request.COOKIES else ''
+    dict['password'] = request.COOKIES['password'] if 'password' in request.COOKIES else ''
+    dict['remember'] = 'checked' if 'remember' in request.COOKIES else ''
+    return render(request, 'login_session.html', {'data': dict})
+
