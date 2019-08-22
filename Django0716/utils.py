@@ -2,6 +2,9 @@ from math import sin, cos, sqrt, atan2, radians
 import requests
 import json
 
+from captcha.fields import CaptchaField
+from django.forms import forms
+
 
 def search(mylat, mylng, dist, sbi, bemp):
     url = 'https://data.tycg.gov.tw/api/v1/rest/datastore/a1b4714b-3b75-4ff8-a8f2-cc377e4eaa0f?format=json'
@@ -40,3 +43,8 @@ def distance(point_1_lat, point_1_lon, point_2_lat, point_2_lon):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     distance = R * c * 1000  # m 公尺
     return distance
+
+
+# 驗證碼類別
+class CaptchaCheck(forms.Form):
+    captcha = CaptchaField()

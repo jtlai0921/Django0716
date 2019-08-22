@@ -1,7 +1,12 @@
+import random
+
+from captcha.helpers import captcha_image_url
+from captcha.models import CaptchaStore
+from django.contrib import auth
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from Django0716.utils import search
+from Django0716.utils import search, CaptchaCheck
 
 
 def hello(request):
@@ -207,4 +212,85 @@ def get_login_session_html(request):
     dict['password'] = request.COOKIES['password'] if 'password' in request.COOKIES else ''
     dict['remember'] = 'checked' if 'remember' in request.COOKIES else ''
     return render(request, 'login_session.html', {'data': dict})
+
+
+def ajax_lotto_form(request):
+    return render(request, 'ajax_lotto_form.html')
+
+
+def ajax_lotto_result(request):
+    lotto = set()
+    while len(lotto) < 6:
+        lotto.add(random.randint(0, 49))
+    return HttpResponse(str(lotto))
+
+
+def ajax_rating_form(request):
+    return render(request, 'ajax_rating_form.html')
+
+
+def ajax_rating_result(request):
+    return HttpResponse("ajax_rating_result")
+
+
+def user_login_form(request):
+    # Cookies
+    username = request.COOKIES['username'] if 'username' in request.COOKIES else ''
+    password = request.COOKIES['password'] if 'password' in request.COOKIES else ''
+    remember = request.COOKIES['remember'] if 'remember' in request.COOKIES else ''
+
+    # 圖片驗證碼
+    # hashkey 驗證碼生成的祕鑰
+    hashkey = CaptchaStore.generate_key()
+    # image_url驗證碼的圖片地址
+    image_url = captcha_image_url(hashkey)
+    response = render(request, 'user_login_form.html', locals())
+    return response
+
+
+# 登入後台
+def user_login(request):
+    # 取得驗證碼
+    captchaCheck = CaptchaCheck(request.POST)
+    # 驗證驗證碼
+    if captchaCheck.is_valid():
+        # 取得使用者(帳號、密碼)
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        # 驗證使用者(帳號、密碼)
+        user = auth.authenticate(username=username, password=password)
+        # 確認使用者
+        if user is not None and user.is_active:
+            # 進行登入並存入session 物件
+            auth.login(request, user)
+            response = HttpResponse("登入 success " + str(user))
+
+            # Cookies
+            remember = request.POST.get('remember', False)
+            if remember:
+                response.set_cookie('username', username)
+                response.set_cookie('password', password)
+                response.set_cookie('remember', 'checked')
+            else:
+                response.delete_cookie('username')
+                response.delete_cookie('password')
+                response.delete_cookie('remember')
+            return response
+        else:
+            return HttpResponse("登入 error")
+    else:
+        return HttpResponse("驗證碼錯誤 error")
+
+
+def user_logout(request):
+    auth.logout(request)
+    return HttpResponse('登出_logout')
+
+
+def user_crud_form(request):
+    flag = request.user.is_authenticated
+    if flag:
+        return render(request, 'user_crud_form.html')
+    else:
+        return HttpResponse('登入逾時/尚未登入~')
 

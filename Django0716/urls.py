@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 import Django0716.views as views
 #from Django0716.views import hello, hello_name, hello_add, hello2_add
 
@@ -45,5 +45,18 @@ urlpatterns = [
     path('login_session/', views.login_session),
     path('login_session_check/', views.login_session_check),
     path('login_session_out/', views.login_session_out),
+
+    path('ajax_lotto_form/', views.ajax_lotto_form),
+    path('ajax_lotto_result/', views.ajax_lotto_result),
+
+    path('ajax_rating_form/', views.ajax_rating_form),
+    path('ajax_rating_result/', views.ajax_rating_result),
+
+    # captcha
+    path('captcha/', include('captcha.urls')),
+    path('user_login_form/', views.user_login_form),
+    path('user_login/', views.user_login),
+    path('user_logout/', views.user_logout),
+    path('user_crud_form/', views.user_crud_form),
 
 ]

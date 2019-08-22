@@ -37,7 +37,28 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha',
 ]
+
+# django_simple_captcha 驗證碼配置其他配置項檢視文件
+# 預設格式
+CAPTCHA_OUTPUT_FORMAT = '%(image)s %(text_field)s %(hidden_field)s '
+CAPTCHA_NOISE_FUNCTIONS = (
+    'captcha.helpers.noise_null', # 沒有樣式
+    #'captcha.helpers.noise_arcs', # 線
+    #'captcha.helpers.noise_dots', # 點
+)
+# 圖片大小
+CAPTCHA_IMAGE_SIZE = (100, 50)
+CAPTCHA_BACKGROUND_COLOR = '#eeeeee'  #驗證碼背景色#
+CAPTCHA_FOREGROUND_COLOR = '#000000'  #驗證碼字体颜色
+# 圖片中的文字為隨機英文字母，如 mdsh
+#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+# 圖片中的文字為數字表示式，如2+2=
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+CAPTCHA_LENGTH = 4  # 字符個數
+# 超時(分鐘)
+CAPTCHA_TIMEOUT = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,4 +140,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
